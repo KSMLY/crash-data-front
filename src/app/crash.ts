@@ -8,8 +8,8 @@ export interface Crash {
   refYear: number;
   crashDate: string;
   crashTime: string;
-  district: { id: number; name: string };
-  municipality: { id: number; name: string };
+  district: { id: number; governorateId: number; nameEn: string; nameAr: string };
+  municipality: { id: number; districtId: number; nameEn: string; nameAr: string };
   latitude: number;
   longitude: number;
   crashType: string;

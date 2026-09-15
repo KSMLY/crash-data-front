@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="crashes">
+<table mat-table [dataSource]="crashes()">
   <ng-container matColumnDef="policeRef">
     <th mat-header-cell *matHeaderCellDef>Police Ref</th>
     <td mat-cell *matCellDef="let c">{{ c.policeRef }}</td>
@@ -11,7 +11,7 @@
 
   <ng-container matColumnDef="district">
     <th mat-header-cell *matHeaderCellDef>District</th>
-    <td mat-cell *matCellDef="let c">{{ c.district.name }}</td>
+    <td mat-cell *matCellDef="let c">{{ c.district.nameEn }}</td>
   </ng-container>
 
   <ng-container matColumnDef="severity">

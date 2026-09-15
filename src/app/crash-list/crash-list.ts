@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { CrashService, Crash } from '../crash';
 
@@ -10,10 +10,10 @@ import { CrashService, Crash } from '../crash';
 export class CrashList implements OnInit {
   private crashService = inject(CrashService);
 
-  crashes: Crash[] = [];
+  crashes = signal<Crash[]>([]);
   columns = ['policeRef', 'crashDate', 'district', 'severity'];
 
   ngOnInit() {
-    this.crashService.getAll().subscribe((data) => (this.crashes = data));
+    this.crashService.getAll().subscribe((data) => this.crashes.set(data));
   }
 }
