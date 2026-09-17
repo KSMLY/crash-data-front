@@ -1,13 +1,17 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
-import { Crash } from './crash';
+import { CrashService } from './crash';
 
-describe('Crash', () => {
-  let service: Crash;
+describe('CrashService', () => {
+  let service: CrashService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Crash);
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
+    service = TestBed.inject(CrashService);
   });
 
   it('should be created', () => {
