@@ -1,0 +1,28 @@
+<aside class="sidebar">
+  <div class="brand">
+    <span class="brand-icon material-symbols-outlined">shield</span>
+    <div>
+      <div class="brand-name">Crash Data</div>
+    </div>
+  </div>
+
+  <nav>
+    @for (n of nav; track n.path) {
+      <a [routerLink]="n.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: n.exact }">
+        <span class="material-symbols-outlined">{{ n.icon }}</span>{{ n.label }}
+      </a>
+    }
+  </nav>
+
+  <div class="user">
+    <div class="avatar">KS</div>
+    <div>
+      <div class="user-name">Kassem Smily</div>
+      <div class="user-role">Road safety analyst</div>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <router-outlet />
+</main>

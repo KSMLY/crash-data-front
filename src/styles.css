@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --rs-accent: #5b3fc4;
+  --rs-accent-hover: #4b32a8;
+  --rs-sidebar-bg: #22242b;
+  --rs-sidebar-fg: #e7e8ec;
+  --rs-sidebar-muted: #9ea2ae;
+  --rs-sidebar-active: #31343d;
+  --rs-page-bg: #f7f7f9;
+  --rs-surface: #ffffff;
+  --rs-text: #17181d;
+  --rs-text-muted: #4d5159;
+  --rs-border: #e2e3e8;
+}
+
+html, body { height: 100%; margin: 0; }
+body { font-family: Archivo, sans-serif; color: var(--rs-text); background: var(--rs-page-bg); }
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined', sans-serif;
+  font-size: 20px;
+  line-height: 1;
+}/* You can add global styles to this file, and also import other style files */
