@@ -28,11 +28,38 @@ export interface Crash {
   trafficControls: string[];
 }
 
+export interface Vehicle {
+  id: number;
+  vehicleNumber: number;
+  vehicleType: string;
+  make: string | null;
+  model: string | null;
+  modelYear: number | null;
+  manoeuvre: string;
+}
+
+export interface Person {
+  id: number;
+  personNumber: number;
+  roadUserType: string;
+  injurySeverity: string;
+}
+
+// GET /crashes/{id}: the list row plus its vehicles and people.
+export interface CrashDetail extends Crash {
+  vehicles: Vehicle[];
+  persons: Person[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class CrashService {
   private http = inject(HttpClient);
 
   getAll(): Observable<Crash[]> {
     return this.http.get<Crash[]>('/api/crashes');
+  }
+
+  getById(id: number): Observable<CrashDetail> {
+    return this.http.get<CrashDetail>(`/api/crashes/${id}`);
   }
 }

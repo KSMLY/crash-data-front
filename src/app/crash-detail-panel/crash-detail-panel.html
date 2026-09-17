@@ -1,0 +1,73 @@
+@if (crashId() === null) {
+  <div class="state">
+    <span class="material-symbols-outlined state-icon">ads_click</span>
+    <div class="state-title">No crash selected</div>
+    <p>Select a row in the table to see its summary here.</p>
+  </div>
+} @else if (loading()) {
+  <div class="state">
+    <span class="material-symbols-outlined state-icon spin">progress_activity</span>
+  </div>
+} @else if (error()) {
+  <div class="state">
+    <span class="material-symbols-outlined state-icon error">error</span>
+    <div class="state-title">Could not load this crash</div>
+    <button type="button" (click)="retry()">
+      <span class="material-symbols-outlined">refresh</span>Try again
+    </button>
+  </div>
+} @else if (crash(); as c) {
+  <header>
+    <div class="ref">{{ c.policeRef }}</div>
+    <span class="badge" [attr.data-severity]="c.severity">
+      <span class="dot"></span>{{ c.severity | label }}
+    </span>
+    <button type="button" class="icon-btn" aria-label="Close detail panel" (click)="closed.emit()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </header>
+
+  <div class="body">
+    <div class="when">
+      {{ c.crashDate | date: 'EEE d MMM y' }}, {{ c.crashTime | slice: 0 : 5 }}
+    </div>
+    <div class="loc">{{ c.municipality?.nameEn ?? c.district.nameEn }}</div>
+    <div class="loc-sub">
+      {{ c.municipality ? c.district.nameEn + ' district' : 'No municipality recorded' }}
+    </div>
+
+    <div class="tiles">
+      @for (t of counts(); track t.label) {
+        <div class="tile">
+          <div class="tile-value" [attr.data-kind]="t.kind">{{ t.value }}</div>
+          <div class="tile-label">{{ t.label }}</div>
+        </div>
+      }
+    </div>
+
+    <div class="row">
+      <span>Crash type</span><span>{{ c.crashType | label }}</span>
+    </div>
+    <div class="row">
+      <span>Impact</span><span>{{ c.impactType | label }}</span>
+    </div>
+    @if (c.vehicles.length) {
+      <div class="row">
+        <span>Vehicles</span>
+        <span class="chips">
+          @for (v of c.vehicles; track v.id) {
+            <span class="chip">{{
+              v.make && v.model ? v.make + ' ' + v.model : (v.vehicleType | label)
+            }}</span>
+          }
+        </span>
+      </div>
+    }
+  </div>
+
+  <footer>
+    <button type="button" class="primary" disabled title="Full record page coming later">
+      Open full record<span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+  </footer>
+}
