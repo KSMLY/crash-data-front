@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CrashList } from './crash-list';
+import { PageHeader } from './page-header';
 
-describe('CrashList', () => {
-  let component: CrashList;
-  let fixture: ComponentFixture<CrashList>;
+describe('PageHeader', () => {
+  let component: PageHeader;
+  let fixture: ComponentFixture<PageHeader>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CrashList],
+      imports: [PageHeader],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CrashList);
+    fixture = TestBed.createComponent(PageHeader);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

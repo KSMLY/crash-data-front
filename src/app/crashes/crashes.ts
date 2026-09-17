@@ -1,13 +1,15 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { CrashService, Crash } from '../crash';
+import { PageHeader } from '../page-header/page-header';
 
 @Component({
-  selector: 'app-crash-list',
-  imports: [MatTableModule],
-  templateUrl: './crash-list.html',
+  selector: 'app-crashes',
+  imports: [MatTableModule, PageHeader],
+  templateUrl: './crashes.html',
+  styleUrl: './crashes.css',
 })
-export class CrashList implements OnInit {
+export class Crashes implements OnInit {
   private crashService = inject(CrashService);
 
   crashes = signal<Crash[]>([]);

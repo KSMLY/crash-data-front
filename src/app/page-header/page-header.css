@@ -1,0 +1,24 @@
+:host {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+h1 { margin: 0 0 5px; font-size: 27px; font-weight: 600; letter-spacing: -0.4px; }
+p  { margin: 0; font-size: 14px; color: var(--rs-text-muted); }
+
+button {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 17px;
+  border: none;
+  border-radius: 6px;
+  background: var(--rs-accent);
+  color: #fff;
+  font: 600 14px Archivo, sans-serif;
+  cursor: pointer;
+}
+button:hover { background: var(--rs-accent-hover); }
+button .material-symbols-outlined { font-size: 19px; }
