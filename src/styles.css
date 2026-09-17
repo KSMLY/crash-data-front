@@ -16,7 +16,7 @@ html, body { height: 100%; margin: 0; }
 body { font-family: Archivo, sans-serif; color: var(--rs-text); background: var(--rs-page-bg); }
 
 .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
+  font-family: 'Material Symbols Outlined', sans-serif;
   font-size: 20px;
   line-height: 1;
 }/* You can add global styles to this file, and also import other style files */
