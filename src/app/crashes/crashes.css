@@ -7,9 +7,17 @@
   box-sizing: border-box;
 }
 
+/* table on the left, detail panel on the right */
+.grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(520px, 1fr) 360px;
+  gap: 18px;
+}
+
 /* white panel that scrolls; the table header sticks to its top */
 .card {
-  flex: 1;
   min-height: 0;
   overflow: auto;
   background: var(--rs-surface);
@@ -58,25 +66,6 @@ tbody tr.selected .ref { font-weight: 600; }
 .nowrap { white-space: nowrap; }
 .sub { font-size: 12.5px; color: #5c6169; }
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-/* --- severity badge (these colours are only ever used here) --- */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 3px 8px;
-  border: 1px solid;
-  border-radius: 4px;
-  font-size: 12.5px;
-  font-weight: 500;
-}
-.badge .dot { width: 7px; height: 7px; border-radius: 999px; flex: none; }
-.badge[data-severity='FATAL']   { color: #1c1f26; background: #e8e9ed; border-color: #cfd1d8; }
-.badge[data-severity='FATAL']   .dot { background: #22242b; }
-.badge[data-severity='SERIOUS'] { color: #8a3a08; background: #fdf0e6; border-color: #f2d6bd; }
-.badge[data-severity='SERIOUS'] .dot { background: #c2410c; }
-.badge[data-severity='SLIGHT']  { color: #6b5310; background: #fbf5e3; border-color: #eee0b6; }
-.badge[data-severity='SLIGHT']  .dot { background: #a3811a; }
 
 /* --- skeleton --- */
 .skeleton { padding: 0 16px; }

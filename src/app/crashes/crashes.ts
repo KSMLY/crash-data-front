@@ -3,10 +3,11 @@ import { DatePipe, SlicePipe } from '@angular/common';
 import { CrashService, Crash } from '../crash';
 import { PageHeader } from '../page-header/page-header';
 import { LabelPipe } from '../label-pipe';
+import { CrashDetailPanel } from '../crash-detail-panel/crash-detail-panel';
 
 @Component({
   selector: 'app-crashes',
-  imports: [DatePipe, SlicePipe, LabelPipe, PageHeader],
+  imports: [DatePipe, SlicePipe, LabelPipe, PageHeader, CrashDetailPanel],
   templateUrl: './crashes.html',
   styleUrl: './crashes.css',
 })
