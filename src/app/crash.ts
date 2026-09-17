@@ -9,7 +9,7 @@ export interface Crash {
   crashDate: string;
   crashTime: string;
   district: { id: number; governorateId: number; nameEn: string; nameAr: string };
-  municipality: { id: number; districtId: number; nameEn: string; nameAr: string };
+  municipality: { id: number; districtId: number; nameEn: string; nameAr: string } | null;
   latitude: number;
   longitude: number;
   crashType: string;

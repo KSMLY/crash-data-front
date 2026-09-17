@@ -2,27 +2,72 @@
   title="Crashes"
   description="Search the crash register and open a record to check its details."
 />
-<table mat-table [dataSource]="crashes()">
-  <ng-container matColumnDef="policeRef">
-    <th mat-header-cell *matHeaderCellDef>Police Ref</th>
-    <td mat-cell *matCellDef="let c">{{ c.policeRef }}</td>
-  </ng-container>
 
-  <ng-container matColumnDef="crashDate">
-    <th mat-header-cell *matHeaderCellDef>Date</th>
-    <td mat-cell *matCellDef="let c">{{ c.crashDate }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="district">
-    <th mat-header-cell *matHeaderCellDef>District</th>
-    <td mat-cell *matCellDef="let c">{{ c.district.nameEn }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="severity">
-    <th mat-header-cell *matHeaderCellDef>Severity</th>
-    <td mat-cell *matCellDef="let c">{{ c.severity }}</td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="columns"></tr>
-  <tr mat-row *matRowDef="let row; columns: columns"></tr>
-</table>
+<div class="card">
+  @if (loading()) {
+    <div class="skeleton">
+      <div class="skeleton-head">
+        @for (w of [90, 120, 160, 80, 110]; track $index) {
+          <div class="bar" [style.width.px]="w"></div>
+        }
+      </div>
+      @for (r of skeletonRows; track r) {
+        <div class="skeleton-row" [style.animation-delay.ms]="r * 60">
+          @for (w of [110, 140, 200, 96, 130]; track $index) {
+            <div class="bar" [style.width.px]="w"></div>
+          }
+        </div>
+      }
+    </div>
+  } @else if (error()) {
+    <div class="state">
+      <span class="material-symbols-outlined state-icon error">error</span>
+      <div class="state-title">The crash register did not respond</div>
+      <p>Check that the backend is running, then try again.</p>
+      <button type="button" (click)="load()">
+        <span class="material-symbols-outlined">refresh</span>Try again
+      </button>
+    </div>
+  } @else if (crashes().length === 0) {
+    <div class="state">
+      <span class="material-symbols-outlined state-icon">inbox</span>
+      <div class="state-title">No crashes recorded yet</div>
+      <p>Records appear here as officers submit them.</p>
+    </div>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Police reference</th>
+          <th>Date and time</th>
+          <th>Location</th>
+          <th>Severity</th>
+          <th>Crash type</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of crashes(); track c.id) {
+          <tr
+            tabindex="0"
+            [class.selected]="c.id === selectedId()"
+            (click)="select(c)"
+            (keydown.enter)="select(c)"
+          >
+            <td class="ref">{{ c.policeRef }}</td>
+            <td class="muted nowrap">{{ c.crashDate | date: 'd MMM y' }}, {{ c.crashTime | slice: 0 : 5 }}</td>
+            <td [title]="(c.municipality ? c.municipality.nameEn + ', ' : '') + c.district.nameEn">
+              <div class="truncate">{{ c.municipality?.nameEn ?? c.district.nameEn }}</div>
+              <div class="truncate sub">{{ c.municipality ? c.district.nameEn : 'No municipality recorded' }}</div>
+            </td>
+            <td class="nowrap">
+              <span class="badge" [attr.data-severity]="c.severity">
+                <span class="dot"></span>{{ c.severity | label }}
+              </span>
+            </td>
+            <td class="muted truncate" [title]="c.crashType | label">{{ c.crashType | label }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
