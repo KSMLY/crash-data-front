@@ -69,7 +69,8 @@ header {
   margin: 14px 0;
 }
 .tile {
-  padding: 8px 9px;
+  padding: 8px 6px;
+  text-align: center;
   background: var(--rs-page-bg);
   border: 1px solid #eeeef1;
   border-radius: 8px;
@@ -80,8 +81,11 @@ header {
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
-.tile-value.bad {
+.tile-value[data-kind='killed'] {
   color: #b42318;
+}
+.tile-value[data-kind='injured'] {
+  color: #a3811a;
 }
 .tile-label {
   margin-top: 3px;
@@ -104,7 +108,20 @@ header {
 .row span:last-child {
   font-weight: 500;
   text-align: right;
-  font-variant-numeric: tabular-nums;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.chip {
+  padding: 2px 7px;
+  border: 1px solid var(--rs-border);
+  border-radius: 999px;
+  background: var(--rs-page-bg);
+  font-size: 12px;
+  font-weight: 500;
 }
 
 /* --- footer --- */

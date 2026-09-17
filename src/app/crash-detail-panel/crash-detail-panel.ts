@@ -1,11 +1,11 @@
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
-import { DatePipe, DecimalPipe, SlicePipe } from '@angular/common';
+import { DatePipe, SlicePipe } from '@angular/common';
 import { CrashService, CrashDetail } from '../crash';
 import { LabelPipe } from '../label-pipe';
 
 @Component({
   selector: 'app-crash-detail-panel',
-  imports: [DatePipe, DecimalPipe, SlicePipe, LabelPipe],
+  imports: [DatePipe, SlicePipe, LabelPipe],
   templateUrl: './crash-detail-panel.html',
   styleUrl: './crash-detail-panel.css',
 })
@@ -38,10 +38,10 @@ export class CrashDetailPanel {
       (p) => p.injurySeverity === 'SERIOUS' || p.injurySeverity === 'SLIGHT',
     ).length;
     return [
-      { label: 'Killed', value: killed, bad: killed > 0 },
-      { label: 'Injured', value: injured, bad: false },
-      { label: 'People involved', value: c.persons.length, bad: false },
-      { label: 'Vehicles', value: c.vehicles.length, bad: false },
+      { label: 'Killed', value: killed, kind: 'killed' },
+      { label: 'Injured', value: injured, kind: 'injured' },
+      { label: 'People involved', value: c.persons.length, kind: 'plain' },
+      { label: 'Vehicles', value: c.vehicles.length, kind: 'plain' },
     ];
   });
 

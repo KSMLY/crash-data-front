@@ -33,6 +33,7 @@ table {
   font-size: 13.5px;
 }
 th {
+  box-sizing: border-box; /* width % includes the padding */
   position: sticky;
   top: 0;
   z-index: 2;
@@ -45,10 +46,11 @@ th {
   color: var(--rs-text-muted);
   white-space: nowrap;
 }
-th:nth-child(1) { width: 150px; }
-th:nth-child(2) { width: 170px; }
-th:nth-child(4) { width: 140px; }
-th:nth-child(5) { width: 170px; }
+/* percentages so the table shrinks with the page; location takes the rest */
+th:nth-child(1) { width: 22%; }
+th:nth-child(2) { width: 24%; }
+th:nth-child(4) { width: 20%; }
+th:nth-child(5) { width: 17%; }
 
 td {
   padding: 13px 12px;

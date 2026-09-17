@@ -39,7 +39,7 @@
     <div class="tiles">
       @for (t of counts(); track t.label) {
         <div class="tile">
-          <div class="tile-value" [class.bad]="t.bad">{{ t.value }}</div>
+          <div class="tile-value" [attr.data-kind]="t.kind">{{ t.value }}</div>
           <div class="tile-label">{{ t.label }}</div>
         </div>
       }
@@ -49,9 +49,20 @@
       <span>Crash type</span><span>{{ c.crashType | label }}</span>
     </div>
     <div class="row">
-      <span>Coordinates</span
-      ><span>{{ c.latitude | number: '1.4-4' }}, {{ c.longitude | number: '1.4-4' }}</span>
+      <span>Impact</span><span>{{ c.impactType | label }}</span>
     </div>
+    @if (c.vehicles.length) {
+      <div class="row">
+        <span>Vehicles</span>
+        <span class="chips">
+          @for (v of c.vehicles; track v.id) {
+            <span class="chip">{{
+              v.make && v.model ? v.make + ' ' + v.model : (v.vehicleType | label)
+            }}</span>
+          }
+        </span>
+      </div>
+    }
   </div>
 
   <footer>
