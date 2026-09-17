@@ -1,0 +1,94 @@
+/* the component itself: a row = sidebar | main */
+:host {
+  display: flex;
+  height: 100vh;
+}
+
+/* ---- sidebar ---- */
+.sidebar {
+  width: 250px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  background: var(--rs-sidebar-bg);
+  color: var(--rs-sidebar-fg);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 22px 20px 20px;
+}
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--rs-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.brand-name { font-size: 14px; font-weight: 600; }
+.brand-sub  { font-size: 12.5px; color: var(--rs-sidebar-muted); }
+
+/* ---- nav ---- */
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 12px;
+}
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #b9bcc6;
+  text-decoration: none;
+}
+nav a:hover {
+  background: #2a2d35;
+  color: #fff;
+}
+nav a.active {
+  background: var(--rs-sidebar-active);
+  color: #fff;
+  font-weight: 600;
+}
+nav a.active .material-symbols-outlined {
+  color: #a794f5;
+}
+
+/* ---- user card ---- */
+.user {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 16px 20px;
+  border-top: 1px solid #31343d;
+}
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #3b3e48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+.user-name { font-size: 13.5px; font-weight: 500; }
+.user-role { font-size: 12.5px; color: var(--rs-sidebar-muted); }
+
+/* ---- main ---- */
+main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
