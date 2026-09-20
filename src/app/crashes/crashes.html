@@ -3,81 +3,189 @@
   description="Search the crash register and open a record to check its details."
 />
 
+<div class="filters">
+  <div class="row">
+    <label class="search">
+      <span class="material-symbols-outlined">search</span>
+      <input
+        type="search"
+        placeholder="Police reference, district or municipality"
+        (input)="setQuery($any($event.target).value)"
+      />
+    </label>
+
+    <label class="chip" [class.on]="period() !== 'last30'">
+      <select aria-label="Period" [value]="period()" (change)="setPeriod($any($event.target).value)">
+        @for (p of periods; track p.value) {
+          <option [value]="p.value">{{ p.label }}</option>
+        }
+      </select>
+      <span class="material-symbols-outlined">expand_more</span>
+    </label>
+
+    <label class="chip" [class.on]="severity() !== ''">
+      <select aria-label="Severity" [value]="severity()" (change)="setSeverity($any($event.target).value)">
+        <option value="">All severities</option>
+        @for (s of severities; track s) {
+          <option [value]="s">{{ s | label }}</option>
+        }
+      </select>
+      <span class="material-symbols-outlined">expand_more</span>
+    </label>
+
+    <label class="chip" [class.on]="districtId() !== ''">
+      <select aria-label="District" [value]="districtId()" (change)="setDistrict($any($event.target).value)">
+        <option value="">All districts</option>
+        @for (d of districts(); track d.id) {
+          <option [value]="d.id">{{ d.nameEn }}</option>
+        }
+      </select>
+      <span class="material-symbols-outlined">expand_more</span>
+    </label>
+
+    <label class="chip" [class.on]="municipalityId() !== ''">
+      <select
+        aria-label="Municipality"
+        [value]="municipalityId()"
+        [disabled]="districtId() === ''"
+        (change)="setMunicipality($any($event.target).value)"
+      >
+        <option value="">All municipalities</option>
+        @for (m of municipalities(); track m.id) {
+          <option [value]="m.id">{{ m.nameEn }}</option>
+        }
+      </select>
+      <span class="material-symbols-outlined">expand_more</span>
+    </label>
+
+    <button type="button" class="more" [class.on]="moreOpen()" (click)="moreOpen.set(!moreOpen())">
+      <span class="material-symbols-outlined">tune</span>More filters
+    </button>
+
+    @if (hasFilters()) {
+      <button type="button" class="clear" (click)="clearAll()">Clear all</button>
+    }
+  </div>
+
+  @if (moreOpen()) {
+    <div class="row">
+      <label class="chip" [class.on]="crashType() !== ''">
+        <select aria-label="Crash type" [value]="crashType()" (change)="setCrashType($any($event.target).value)">
+          <option value="">All crash types</option>
+          @for (t of crashTypes(); track t) {
+            <option [value]="t">{{ t | label }}</option>
+          }
+        </select>
+        <span class="material-symbols-outlined">expand_more</span>
+      </label>
+    </div>
+  }
+</div>
+
 <div class="grid">
   <div class="card">
-    @if (loading()) {
-      <div class="skeleton">
-        <div class="skeleton-head">
-          @for (w of [90, 120, 160, 80, 110]; track $index) {
-            <div class="bar" [style.width.px]="w"></div>
-          }
-        </div>
-        @for (r of skeletonRows; track r) {
-          <div class="skeleton-row" [style.animation-delay.ms]="r * 60">
-            @for (w of [110, 140, 200, 96, 130]; track $index) {
+    <div class="scroll">
+      @if (loading()) {
+        <div class="skeleton">
+          <div class="skeleton-head">
+            @for (w of [90, 120, 160, 80, 110]; track $index) {
               <div class="bar" [style.width.px]="w"></div>
             }
           </div>
-        }
-      </div>
-    } @else if (error()) {
-      <div class="state">
-        <span class="material-symbols-outlined state-icon error">error</span>
-        <div class="state-title">The crash register did not respond</div>
-        <p>Check that the backend is running, then try again.</p>
-        <button type="button" (click)="load()">
-          <span class="material-symbols-outlined">refresh</span>Try again
-        </button>
-      </div>
-    } @else if (crashes().length === 0) {
-      <div class="state">
-        <span class="material-symbols-outlined state-icon">inbox</span>
-        <div class="state-title">No crashes recorded yet</div>
-        <p>Records appear here as officers submit them.</p>
-      </div>
-    } @else {
-      <table>
-        <thead>
-          <tr>
-            <th>Police reference</th>
-            <th>Date and time</th>
-            <th>Location</th>
-            <th>Severity</th>
-            <th>Crash type</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (c of crashes(); track c.id) {
-            <tr
-              tabindex="0"
-              [class.selected]="c.id === selectedId()"
-              (click)="select(c)"
-              (keydown.enter)="select(c)"
-            >
-              <td class="ref">{{ c.policeRef }}</td>
-              <td class="muted nowrap">
-                {{ c.crashDate | date: 'd MMM y' }}, {{ c.crashTime | slice: 0 : 5 }}
-              </td>
-              <td
-                [title]="(c.municipality ? c.municipality.nameEn + ', ' : '') + c.district.nameEn"
-              >
-                <div class="truncate">{{ c.municipality?.nameEn ?? c.district.nameEn }}</div>
-                <div class="truncate sub">
-                  {{ c.municipality ? c.district.nameEn : 'No municipality recorded' }}
-                </div>
-              </td>
-              <td class="nowrap">
-                <span class="badge" [attr.data-severity]="c.severity">
-                  <span class="dot"></span>{{ c.severity | label }}
-                </span>
-              </td>
-              <td class="muted truncate" [title]="c.crashType | label">
-                {{ c.crashType | label }}
-              </td>
-            </tr>
+          @for (r of skeletonRows; track r) {
+            <div class="skeleton-row" [style.animation-delay.ms]="r * 60">
+              @for (w of [110, 140, 200, 96, 130]; track $index) {
+                <div class="bar" [style.width.px]="w"></div>
+              }
+            </div>
           }
-        </tbody>
-      </table>
+        </div>
+      } @else if (error()) {
+        <div class="state">
+          <span class="material-symbols-outlined state-icon error">error</span>
+          <div class="state-title">The crash register did not respond</div>
+          <p>Check that the backend is running, then try again.</p>
+          <button type="button" (click)="load()">
+            <span class="material-symbols-outlined">refresh</span>Try again
+          </button>
+        </div>
+      } @else if (crashes().length === 0) {
+        <div class="state">
+          <span class="material-symbols-outlined state-icon">search_off</span>
+          <div class="state-title">No crashes match</div>
+          <p>Try a different search, a wider period, or clear the filters.</p>
+        </div>
+      } @else {
+        <table>
+          <thead>
+            <tr>
+              <th>Police reference</th>
+              <th>Date and time</th>
+              <th>Location</th>
+              <th>Severity</th>
+              <th>Crash type</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of crashes(); track c.id) {
+              <tr
+                tabindex="0"
+                [class.selected]="c.id === selectedId()"
+                (click)="select(c)"
+                (keydown.enter)="select(c)"
+              >
+                <td class="ref">{{ c.policeRef }}</td>
+                <td class="muted nowrap">
+                  {{ c.crashDate | date: 'd MMM y' }}, {{ c.crashTime | slice: 0 : 5 }}
+                </td>
+                <td
+                  [title]="(c.municipality ? c.municipality.nameEn + ', ' : '') + c.district.nameEn"
+                >
+                  <div class="truncate">{{ c.municipality?.nameEn ?? c.district.nameEn }}</div>
+                  <div class="truncate sub">
+                    {{ c.municipality ? c.district.nameEn : 'No municipality recorded' }}
+                  </div>
+                </td>
+                <td class="nowrap">
+                  <span class="badge" [attr.data-severity]="c.severity">
+                    <span class="dot"></span>{{ c.severity | label }}
+                  </span>
+                </td>
+                <td class="muted truncate" [title]="c.crashType | label">
+                  {{ c.crashType | label }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    @if (!loading() && !error() && total() > 0) {
+      <footer class="pager">
+        <span>Showing {{ from() }}–{{ to() }} of {{ total() }} crashes</span>
+        <nav>
+          <button
+            type="button"
+            aria-label="Previous page"
+            [disabled]="page() === 0"
+            (click)="goTo(page() - 1)"
+          >
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          @for (p of pageNumbers(); track p) {
+            <button type="button" [class.on]="p === page()" (click)="goTo(p)">{{ p + 1 }}</button>
+          }
+          <button
+            type="button"
+            aria-label="Next page"
+            [disabled]="page() >= lastPage()"
+            (click)="goTo(page() + 1)"
+          >
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </nav>
+      </footer>
     }
   </div>
   <app-crash-detail-panel [crashId]="selectedId()" (closed)="selectedId.set(null)" />
