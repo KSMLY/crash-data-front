@@ -14,37 +14,38 @@
       />
     </label>
 
-    <span class="chip" [class.on]="period() !== 'last30'">
-      <select [value]="period()" (change)="setPeriod($any($event.target).value)">
+    <label class="chip" [class.on]="period() !== 'last30'">
+      <select aria-label="Period" [value]="period()" (change)="setPeriod($any($event.target).value)">
         @for (p of periods; track p.value) {
           <option [value]="p.value">{{ p.label }}</option>
         }
       </select>
       <span class="material-symbols-outlined">expand_more</span>
-    </span>
+    </label>
 
-    <span class="chip" [class.on]="severity() !== ''">
-      <select [value]="severity()" (change)="setSeverity($any($event.target).value)">
+    <label class="chip" [class.on]="severity() !== ''">
+      <select aria-label="Severity" [value]="severity()" (change)="setSeverity($any($event.target).value)">
         <option value="">All severities</option>
         @for (s of severities; track s) {
           <option [value]="s">{{ s | label }}</option>
         }
       </select>
       <span class="material-symbols-outlined">expand_more</span>
-    </span>
+    </label>
 
-    <span class="chip" [class.on]="districtId() !== ''">
-      <select [value]="districtId()" (change)="setDistrict($any($event.target).value)">
+    <label class="chip" [class.on]="districtId() !== ''">
+      <select aria-label="District" [value]="districtId()" (change)="setDistrict($any($event.target).value)">
         <option value="">All districts</option>
         @for (d of districts(); track d.id) {
           <option [value]="d.id">{{ d.nameEn }}</option>
         }
       </select>
       <span class="material-symbols-outlined">expand_more</span>
-    </span>
+    </label>
 
-    <span class="chip" [class.on]="municipalityId() !== ''">
+    <label class="chip" [class.on]="municipalityId() !== ''">
       <select
+        aria-label="Municipality"
         [value]="municipalityId()"
         [disabled]="districtId() === ''"
         (change)="setMunicipality($any($event.target).value)"
@@ -55,7 +56,7 @@
         }
       </select>
       <span class="material-symbols-outlined">expand_more</span>
-    </span>
+    </label>
 
     <button type="button" class="more" [class.on]="moreOpen()" (click)="moreOpen.set(!moreOpen())">
       <span class="material-symbols-outlined">tune</span>More filters
@@ -68,15 +69,15 @@
 
   @if (moreOpen()) {
     <div class="row">
-      <span class="chip" [class.on]="crashType() !== ''">
-        <select [value]="crashType()" (change)="setCrashType($any($event.target).value)">
+      <label class="chip" [class.on]="crashType() !== ''">
+        <select aria-label="Crash type" [value]="crashType()" (change)="setCrashType($any($event.target).value)">
           <option value="">All crash types</option>
           @for (t of crashTypes(); track t) {
             <option [value]="t">{{ t | label }}</option>
           }
         </select>
         <span class="material-symbols-outlined">expand_more</span>
-      </span>
+      </label>
     </div>
   }
 </div>
