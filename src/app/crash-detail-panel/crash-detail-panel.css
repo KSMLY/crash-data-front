@@ -158,22 +158,13 @@ footer {
   font-size: 18px;
 }
 
-/* --- empty / loading / error --- */
+/* --- empty / loading / error (shared .state in styles.css, sized down for the panel) --- */
 .state {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 40px 28px;
-  text-align: center;
 }
 .state-icon {
   font-size: 32px;
-  color: #a8abb4;
-}
-.state-icon.error {
-  color: #b42318;
 }
 .state-icon.spin {
   animation: spin 1s linear infinite;
@@ -181,28 +172,14 @@ footer {
 .state-title {
   margin-top: 10px;
   font-size: 14.5px;
-  font-weight: 600;
 }
 .state p {
-  margin: 6px 0 0;
-  font-size: 13.5px;
-  color: #5c6169;
-  line-height: 1.5;
+  margin-top: 6px;
 }
 .state button {
-  display: flex;
-  align-items: center;
-  gap: 7px;
   margin-top: 16px;
   padding: 9px 14px;
-  border: none;
-  border-radius: 6px;
-  background: var(--rs-accent);
-  color: #fff;
-  font:
-    600 13px Archivo,
-    sans-serif;
-  cursor: pointer;
+  font-size: 13px;
 }
 .state button .material-symbols-outlined {
   font-size: 17px;

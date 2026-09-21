@@ -84,6 +84,30 @@ export interface CrashSearch {
   size?: number;
 }
 
+export interface Counts {
+  current: number;
+  previous: number;
+}
+
+export interface DistrictCounts {
+  district: District;
+  total: number;
+  fatal: number;
+  serious: number;
+  previousTotal: number;
+}
+
+export interface Overview {
+  from: string;
+  to: string;
+  previousFrom: string;
+  previousTo: string;
+  total: Counts;
+  fatal: Counts;
+  serious: Counts;
+  topDistricts: DistrictCounts[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class CrashService {
   private http = inject(HttpClient);
@@ -115,5 +139,9 @@ export class CrashService {
     return this.http
       .get<Record<string, string[]>>('/api/codes')
       .pipe(map((codes) => codes['crashType']));
+  }
+
+  getOverview(): Observable<Overview> {
+    return this.http.get<Overview>('/api/overview');
   }
 }
