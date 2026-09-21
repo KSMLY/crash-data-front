@@ -1,0 +1,97 @@
+<div class="header">
+  <h2>Crash trend</h2>
+  <div class="segments">
+    @for (g of granularities; track g) {
+      <button
+        type="button"
+        [class.active]="granularity() === g"
+        [attr.aria-pressed]="granularity() === g"
+        (click)="setGranularity(g)"
+      >
+        {{ g | label }}
+      </button>
+    }
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="skeleton"></div>
+} @else if (error()) {
+  <div class="state">
+    <span class="material-symbols-outlined state-icon error">error</span>
+    <div class="state-title">Trend unavailable</div>
+    <button type="button" (click)="load()">
+      <span class="material-symbols-outlined">refresh</span>Try again
+    </button>
+  </div>
+} @else {
+  <div class="plot">
+    <svg
+      [attr.viewBox]="'0 0 ' + plot.width + ' ' + plot.height"
+      role="img"
+      aria-label="Crashes per period"
+    >
+      @for (t of chart().yTicks; track t.value) {
+        <line
+          class="grid"
+          [attr.x1]="plot.x0"
+          [attr.x2]="plot.x1"
+          [attr.y1]="t.y"
+          [attr.y2]="t.y"
+        />
+        <text class="tick" [attr.x]="plot.x0 - 6" [attr.y]="t.y + 4" text-anchor="end">
+          {{ t.value | number }}
+        </text>
+      }
+      <line
+        class="axis"
+        [attr.x1]="plot.x0"
+        [attr.x2]="plot.x1"
+        [attr.y1]="plot.y1"
+        [attr.y2]="plot.y1"
+      />
+
+      @for (b of chart().bars; track b.point.periodStart; let i = $index) {
+        <rect
+          class="bar"
+          [class.hovered]="hovered() === i"
+          [attr.x]="b.x"
+          [attr.y]="b.y"
+          [attr.width]="b.w"
+          [attr.height]="b.h"
+          rx="2"
+        />
+      }
+
+      @for (t of chart().xTicks; track t.date) {
+        <text class="tick" [attr.x]="t.x" [attr.y]="plot.height - 11" text-anchor="middle">
+          {{ t.date | date: axisDateFormat() }}
+        </text>
+      }
+
+      @for (b of chart().bars; track b.point.periodStart; let i = $index) {
+        <rect
+          class="hit"
+          [attr.x]="b.slotX"
+          [attr.y]="plot.y0"
+          [attr.width]="b.slotW"
+          [attr.height]="plot.y1 - plot.y0"
+          (mouseenter)="hovered.set(i)"
+          (mouseleave)="hovered.set(null)"
+        />
+      }
+    </svg>
+
+    @if (tooltip(); as tip) {
+      <div class="tooltip" [style.left.%]="tip.leftPct">
+        <div class="tooltip-title">{{ tip.date | date: tooltipDateFormat() }}</div>
+        @for (r of tip.rows; track r.label) {
+          <div class="tooltip-row">
+            <span>{{ r.label }}</span
+            ><span>{{ r.value | number }}</span>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

@@ -1,6 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { PageHeader } from '../page-header/page-header';
+import { TrendChart } from '../trend-chart/trend-chart';
 import { CrashService, Overview as OverviewData } from '../crash';
 
 interface Kpi {
@@ -12,7 +13,7 @@ interface Kpi {
 
 @Component({
   selector: 'app-overview',
-  imports: [DecimalPipe, PageHeader],
+  imports: [DecimalPipe, PageHeader, TrendChart],
   templateUrl: './overview.html',
   styleUrl: './overview.css',
 })
