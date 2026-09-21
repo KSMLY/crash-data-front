@@ -108,6 +108,17 @@ export interface Overview {
   topDistricts: DistrictCounts[];
 }
 
+export type Granularity = 'DAILY' | 'WEEKLY' | 'MONTHLY';
+
+// One bucket of GET /overview/trend; periodStart is the first day of the bucket.
+export interface TrendPoint {
+  periodStart: string;
+  total: number;
+  fatal: number;
+  serious: number;
+  slight: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class CrashService {
   private http = inject(HttpClient);
@@ -143,5 +154,9 @@ export class CrashService {
 
   getOverview(): Observable<Overview> {
     return this.http.get<Overview>('/api/overview');
+  }
+
+  getTrend(granularity: Granularity): Observable<TrendPoint[]> {
+    return this.http.get<TrendPoint[]>('/api/overview/trend', { params: { granularity } });
   }
 }
