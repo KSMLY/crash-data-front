@@ -42,3 +42,37 @@ body { font-family: Archivo, sans-serif; color: var(--rs-text); background: var(
 .badge[data-severity='SLIGHT']  { color: #6b5310; background: #fbf5e3; border-color: #eee0b6; }
 .badge[data-severity='SLIGHT']  .dot { background: #a3811a; }
 
+
+/* empty / error / loading state — shared by the overview, crashes table and detail panel.
+   Components only override sizing (height, padding). */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 56px 32px;
+  box-sizing: border-box;
+}
+.state-icon { font-size: 34px; color: #a8abb4; }
+.state-icon.error { color: #b42318; }
+.state-title { margin-top: 12px; font-size: 16px; font-weight: 600; }
+.state p { margin: 7px 0 0; max-width: 420px; font-size: 13.5px; color: #5c6169; line-height: 1.55; }
+.state button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 18px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--rs-accent);
+  color: #fff;
+  font: 600 13.5px Archivo, sans-serif;
+  cursor: pointer;
+}
+.state button:hover { background: var(--rs-accent-hover); }
+.state button .material-symbols-outlined { font-size: 18px; }
+
+/* skeleton pulse */
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
