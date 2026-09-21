@@ -126,12 +126,12 @@ export class TrendChart implements OnInit {
     return {
       date: p.periodStart,
       // Keep the tooltip inside the card: it is centred on the bar, so clamp by half its width.
-      leftPct: Math.min(Math.max((bar.cx / PLOT.width) * 100, 22), 78),
-      rows: [
-        { label: 'Total', value: p.total },
+      leftPct: Math.min(Math.max((bar.cx / PLOT.width) * 100, 18), 82),
+      total: p.total,
+      breakdown: [
         { label: 'Fatal', value: p.fatal },
-        { label: 'Serious injury', value: p.serious },
-        { label: 'Slight injury', value: p.slight },
+        { label: 'Serious', value: p.serious },
+        { label: 'Slight', value: p.slight },
       ],
     };
   });

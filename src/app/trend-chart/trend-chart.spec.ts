@@ -96,6 +96,7 @@ describe('TrendChart', () => {
       .flush([{ periodStart: '2026-09-01', total: 5, fatal: 1, serious: 2, slight: 2 }]);
     expect(component.tooltip()).toBeNull();
     component.hovered.set(0);
-    expect(component.tooltip()?.rows.map((r) => r.value)).toEqual([5, 1, 2, 2]);
+    expect(component.tooltip()?.total).toBe(5);
+    expect(component.tooltip()?.breakdown.map((r) => r.value)).toEqual([1, 2, 2]);
   });
 });

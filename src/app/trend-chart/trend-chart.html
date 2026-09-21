@@ -84,13 +84,16 @@
 
     @if (tooltip(); as tip) {
       <div class="tooltip" [style.left.%]="tip.leftPct">
-        <div class="tooltip-title">{{ tip.date | date: tooltipDateFormat() }}</div>
-        @for (r of tip.rows; track r.label) {
-          <div class="tooltip-row">
-            <span>{{ r.label }}</span
-            ><span>{{ r.value | number }}</span>
-          </div>
-        }
+        <div class="tooltip-title">
+          {{ tip.date | date: tooltipDateFormat() }} · {{ tip.total | number }} crashes
+        </div>
+        <div class="tooltip-breakdown">
+          @for (r of tip.breakdown; track r.label) {
+            <span
+              >{{ r.label }} <b>{{ r.value | number }}</b></span
+            >
+          }
+        </div>
       </div>
     }
   </div>

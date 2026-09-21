@@ -78,33 +78,32 @@ svg {
   fill: transparent;
 }
 
+/* compact: two short lines so it doesn't cover the bars around the hovered one */
 .tooltip {
   position: absolute;
-  top: 6px;
-  min-width: 156px;
-  padding: 9px 11px;
+  top: 0;
+  padding: 6px 9px;
   border-radius: 6px;
   background: var(--rs-sidebar-bg);
-  color: #fff;
-  font-size: 12.5px;
+  color: #bfc2cc;
+  font-size: 11.5px;
+  line-height: 1.4;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
   transform: translateX(-50%);
   pointer-events: none;
 }
 .tooltip-title {
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-.tooltip-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  color: #bfc2cc;
-  font-variant-numeric: tabular-nums;
-}
-/* the first row is the total, which stands out from the severity breakdown */
-.tooltip-row:first-of-type {
   color: #fff;
   font-weight: 600;
+}
+.tooltip-breakdown {
+  display: flex;
+  gap: 10px;
+}
+.tooltip-breakdown b {
+  color: #fff;
+  font-weight: 500;
 }
 
 /* --- loading / error, same height as the drawn chart so the card doesn't jump --- */
