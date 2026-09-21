@@ -1,1 +1,229 @@
-:host { display: block; padding: 26px 32px 24px; }
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 26px 32px 24px;
+  box-sizing: border-box;
+}
+
+.card {
+  background: var(--rs-surface);
+  border: 1px solid var(--rs-border);
+  border-radius: 10px;
+}
+h2 {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 600;
+}
+
+/* --- KPI cards --- */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.kpi {
+  padding: 18px 20px;
+}
+.kpi-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13.5px;
+  color: var(--rs-text-muted);
+}
+.kpi-label .material-symbols-outlined {
+  font-size: 19px;
+  color: var(--rs-accent);
+}
+.kpi-value {
+  display: flex;
+  align-items: baseline;
+  gap: 11px;
+  margin-top: 12px;
+}
+.number {
+  font-size: 38px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.kpi-note {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: #5c6169;
+}
+
+/* more crashes is bad (red), fewer is good (green) — only ever used for deltas */
+.delta {
+  font-size: 13.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #5c6169;
+}
+.delta.up {
+  color: #b42318;
+}
+.delta.down {
+  color: #15803d;
+}
+
+/* --- map on the left, chart + districts on the right --- */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(520px, 1fr) 404px;
+  gap: 18px;
+  align-items: start;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.placeholder {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #5c6169;
+  font-size: 13.5px;
+}
+.placeholder p {
+  margin: 0;
+}
+
+/* --- top districts --- */
+.districts {
+  padding: 16px 20px 8px;
+}
+.districts h2 {
+  margin-bottom: 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th {
+  padding: 0 0 8px;
+  text-align: left;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: #5c6169;
+  border-bottom: 1px solid #ebecf0;
+}
+td {
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f3f6;
+}
+th + th,
+td + td {
+  padding-left: 14px;
+  white-space: nowrap;
+}
+/* district name takes what's left; the number columns hug their content */
+th:first-child {
+  width: 100%;
+}
+.num {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.count {
+  font-weight: 600;
+}
+/* severity scale colours, same as the badges */
+.fatal {
+  color: #1c1f26;
+  font-weight: 600;
+}
+.serious {
+  color: #8a3a08;
+  font-weight: 600;
+}
+.muted {
+  color: var(--rs-text-muted);
+}
+.truncate {
+  max-width: 0; /* lets the district cell shrink below its text so ellipsis can kick in */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.empty {
+  padding: 16px 0;
+  font-size: 13.5px;
+  color: #5c6169;
+}
+
+/* --- skeleton --- */
+.skeleton {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+.bar {
+  border-radius: 3px;
+  background: #eeeef1;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* --- error --- */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 56px 32px;
+}
+.state-icon {
+  font-size: 34px;
+  color: #a8abb4;
+}
+.state-icon.error {
+  color: #b42318;
+}
+.state-title {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.state p {
+  margin: 7px 0 0;
+  max-width: 420px;
+  font-size: 13.5px;
+  color: #5c6169;
+  line-height: 1.55;
+}
+.state button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 18px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--rs-accent);
+  color: #fff;
+  font:
+    600 13.5px Archivo,
+    sans-serif;
+  cursor: pointer;
+}
+.state button:hover {
+  background: var(--rs-accent-hover);
+}
+.state button .material-symbols-outlined {
+  font-size: 18px;
+}
