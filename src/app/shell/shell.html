@@ -8,18 +8,32 @@
 
   <nav>
     @for (n of nav; track n.path) {
-      <a [routerLink]="n.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: n.exact }">
-        <span class="material-symbols-outlined">{{ n.icon }}</span>{{ n.label }}
+      <a
+        [routerLink]="n.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: n.exact }"
+      >
+        <span class="material-symbols-outlined">{{ n.icon }}</span
+        >{{ n.label }}
       </a>
     }
   </nav>
 
   <div class="user">
-    <div class="avatar">KS</div>
-    <div>
-      <div class="user-name">Kassem Smily</div>
+    <div class="avatar">{{ initials() }}</div>
+    <div class="user-text">
+      <div class="user-name">{{ email() }}</div>
       <div class="user-role">Road safety analyst</div>
     </div>
+    <button
+      type="button"
+      class="sign-out"
+      (click)="signOut()"
+      aria-label="Sign out"
+      title="Sign out"
+    >
+      <span class="material-symbols-outlined">logout</span>
+    </button>
   </div>
 </aside>
 
