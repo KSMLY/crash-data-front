@@ -30,8 +30,14 @@
   align-items: center;
   justify-content: center;
 }
-.brand-name { font-size: 14px; font-weight: 600; }
-.brand-sub  { font-size: 12.5px; color: var(--rs-sidebar-muted); }
+.brand-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.brand-sub {
+  font-size: 12.5px;
+  color: var(--rs-sidebar-muted);
+}
 
 /* ---- nav ---- */
 nav {
@@ -83,8 +89,43 @@ nav a.active .material-symbols-outlined {
   font-size: 13px;
   font-weight: 600;
 }
-.user-name { font-size: 13.5px; font-weight: 500; }
-.user-role { font-size: 12.5px; color: var(--rs-sidebar-muted); }
+.user-name {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.user-role {
+  font-size: 12.5px;
+  color: var(--rs-sidebar-muted);
+}
+
+.user-text {
+  min-width: 0;
+}
+.user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sign-out {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--rs-sidebar-muted);
+  cursor: pointer;
+}
+.sign-out:hover {
+  background: #31343d;
+  color: #fff;
+}
+.sign-out .material-symbols-outlined {
+  font-size: 19px;
+}
 
 /* ---- main ---- */
 main {
