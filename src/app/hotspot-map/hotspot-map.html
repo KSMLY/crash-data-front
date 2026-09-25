@@ -1,0 +1,28 @@
+<div class="header">
+  <h2>Crash hotspots</h2>
+</div>
+
+<!-- Leaflet measures the container when the map is created, so .map is always in the DOM;
+     loading and error cover it instead of replacing it. -->
+<div class="frame">
+  <div class="map" #mapEl></div>
+
+  @if (loading()) {
+    <div class="cover skeleton"></div>
+  } @else if (error()) {
+    <div class="cover state">
+      <span class="material-symbols-outlined state-icon error">error</span>
+      <div class="state-title">Hotspots unavailable</div>
+      <button type="button" (click)="load()">
+        <span class="material-symbols-outlined">refresh</span>Try again
+      </button>
+    </div>
+  } @else {
+    <div class="legend">
+      <div class="legend-title">Crashes in cluster</div>
+      <div class="legend-row"><i class="swatch high"></i>150 or more</div>
+      <div class="legend-row"><i class="swatch mid"></i>60 – 149</div>
+      <div class="legend-row"><i class="swatch low"></i>Fewer than 60</div>
+    </div>
+  }
+</div>

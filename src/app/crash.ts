@@ -119,6 +119,16 @@ export interface TrendPoint {
   slight: number;
 }
 
+// One crash on the hotspot map; GET /crashes/points.
+export interface CrashPoint {
+  id: number;
+  policeRef: string;
+  crashDate: string;
+  latitude: number;
+  longitude: number;
+  severity: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class CrashService {
   private http = inject(HttpClient);
@@ -158,5 +168,9 @@ export class CrashService {
 
   getTrend(granularity: Granularity): Observable<TrendPoint[]> {
     return this.http.get<TrendPoint[]>('/api/overview/trend', { params: { granularity } });
+  }
+
+  getPoints(): Observable<CrashPoint[]> {
+    return this.http.get<CrashPoint[]>('/api/crashes/points');
   }
 }
