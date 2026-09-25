@@ -127,6 +127,13 @@
 }
 .clear:hover { text-decoration: underline; }
 
+/* Borrows the .more look; margin-left: auto soaks up the free space in the flex row
+   and pushes everything from here to the right edge */
+.export-error { margin-left: auto; font-size: 12.5px; color: #b42318; }
+.export { margin-left: auto; }
+.export-error + .export { margin-left: 0; }
+.export:disabled { opacity: 0.5; cursor: default; border-color: #dfe0e6; }
+
 /* --- pager --- */
 .pager {
   flex: none;

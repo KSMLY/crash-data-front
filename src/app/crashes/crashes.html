@@ -65,6 +65,13 @@
     @if (hasFilters()) {
       <button type="button" class="clear" (click)="clearAll()">Clear all</button>
     }
+
+    @if (exportError()) {
+      <span class="export-error">Export failed, try again</span>
+    }
+    <button type="button" class="more export" [disabled]="exporting() || total() === 0" (click)="exportCsv()">
+      <span class="material-symbols-outlined">download</span>{{ exporting() ? 'Exporting…' : 'Export CSV' }}
+    </button>
   </div>
 
   @if (moreOpen()) {
