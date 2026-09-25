@@ -101,3 +101,6 @@ body { font-family: Archivo, sans-serif; color: var(--rs-text); background: var(
 .crash-dot[data-severity='FATAL']   { background: #22242b; }
 .crash-dot[data-severity='SERIOUS'] { background: #c2410c; }
 .crash-dot[data-severity='SLIGHT']  { background: #a3811a; }
+.crash-popup-title { margin-bottom: 7px; font-weight: 600; }
+.leaflet-popup-content hr { margin: 6px 0; border: none; border-top: 1px solid #e6e6ea; }
+.crash-popup-more { margin-top: 7px; color: #6a6f78; }

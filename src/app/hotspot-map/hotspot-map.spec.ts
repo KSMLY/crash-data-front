@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
-import { clusterBucket, HotspotMap, popupHtml } from './hotspot-map';
+import { clusterBucket, clusterPopupHtml, HotspotMap, popupHtml } from './hotspot-map';
 import { CrashPoint } from '../crash';
 
 function point(id: number, severity: string): CrashPoint {
@@ -29,6 +29,22 @@ describe('clusterBucket', () => {
 describe('popupHtml', () => {
   it('shows the reference, the date and the severity', () => {
     expect(popupHtml(point(1, 'FATAL'))).toBe('<b>2026-000001</b><br>2 Sep 2026 · Fatal');
+  });
+});
+
+describe('clusterPopupHtml', () => {
+  it('lists the crashes sharing a coordinate', () => {
+    const html = clusterPopupHtml(['a', 'b']);
+    expect(html).toContain('2 crashes at this location');
+    expect(html).toContain('a<hr>b');
+  });
+
+  it('counts the ones it leaves out', () => {
+    const html = clusterPopupHtml(Array.from({ length: 9 }, (_, i) => `c${i}`));
+    expect(html).toContain('9 crashes at this location');
+    expect(html).toContain('c5');
+    expect(html).not.toContain('c6');
+    expect(html).toContain('and 3 more');
   });
 });
 

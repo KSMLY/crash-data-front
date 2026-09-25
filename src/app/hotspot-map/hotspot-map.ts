@@ -22,9 +22,24 @@ const CLUSTERS = [
 
 const DOT_SIZE = 12;
 
+// Crashes closer than this many pixels are grouped; the default is 80, which holds
+// points together long after the map has room to show them apart.
+const CLUSTER_RADIUS = 45;
+
 /** The bucket a cluster of {@code count} crashes is drawn with. */
 export function clusterBucket(count: number) {
   return CLUSTERS.find((bucket) => count >= bucket.min)!;
+}
+
+// At most this many crashes are listed before the popup says how many are left.
+const POPUP_LIMIT = 6;
+
+/** Popup for several crashes recorded at one coordinate. */
+export function clusterPopupHtml(popups: string[]): string {
+  const shown = popups.slice(0, POPUP_LIMIT).join('<hr>');
+  const hidden = popups.length - POPUP_LIMIT;
+  const more = hidden > 0 ? `<div class="crash-popup-more">and ${hidden} more</div>` : '';
+  return `<div class="crash-popup-title">${popups.length} crashes at this location</div>${shown}${more}`;
 }
 
 /** Popup contents: the reference, then the date and severity on one line. */
@@ -93,6 +108,16 @@ export class HotspotMap {
 
     this.markers = L.markerClusterGroup({
       showCoverageOnHover: false,
+      // clusters come apart as the reader zooms in, not by clicking them: a tighter
+      // radius than the default 80 splits them sooner. Clustering is never switched
+      // off, so crashes recorded at the very same coordinates keep their count
+      // instead of stacking into what looks like a single crash.
+      maxClusterRadius: CLUSTER_RADIUS,
+      // Both click behaviours are handled below instead: zooming to a cluster of
+      // crashes at one coordinate does nothing, and fanning them out invents
+      // distance between crashes that were recorded at the same place.
+      spiderfyOnMaxZoom: false,
+      zoomToBoundsOnClick: false,
       iconCreateFunction: (cluster) => {
         const count = cluster.getChildCount();
         const bucket = clusterBucket(count);
@@ -103,6 +128,56 @@ export class HotspotMap {
         });
       },
     }).addTo(this.map);
+
+    this.markers.on('clusterclick', (event) => this.openCluster(event.propagatedFrom));
+    this.enableModifierZoom();
+  }
+
+  /**
+   * Leaflet's own wheel zoom is off: the card sits mid-page, so a plain wheel over it
+   * has to keep scrolling the page. Holding Ctrl (or Cmd) zooms instead, the way an
+   * embedded map does.
+   */
+  private enableModifierZoom() {
+    const map = this.map!;
+    this.mapEl().nativeElement.addEventListener(
+      'wheel',
+      (event) => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        const step = event.deltaY < 0 ? 1 : -1;
+        map.setZoomAround(map.mouseEventToContainerPoint(event), map.getZoom() + step);
+      },
+      // the listener calls preventDefault, which a passive listener may not do
+      { passive: false },
+    );
+  }
+
+  /** Zooms into a cluster, or lists its crashes when zooming cannot separate them. */
+  private openCluster(cluster: L.MarkerCluster) {
+    if (this.separableByZoom(cluster.getBounds())) {
+      cluster.zoomToBounds({ padding: [40, 40] });
+      return;
+    }
+    const popups = cluster
+      .getAllChildMarkers()
+      .map((marker) => String(marker.getPopup()?.getContent() ?? ''));
+    L.popup().setLatLng(cluster.getLatLng()).setContent(clusterPopupHtml(popups)).openOn(this.map!);
+  }
+
+  /**
+   * Whether these crashes would still be grouped at the deepest zoom the map has.
+   * Crashes at one coordinate never come apart, and neither do crashes a few metres
+   * apart, so clicking such a cluster has to show them rather than zoom at them.
+   */
+  private separableByZoom(bounds: L.LatLngBounds): boolean {
+    const map = this.map!;
+    const zoom = map.getMaxZoom();
+    return (
+      map
+        .project(bounds.getNorthEast(), zoom)
+        .distanceTo(map.project(bounds.getSouthWest(), zoom)) > CLUSTER_RADIUS
+    );
   }
 
   private draw(points: CrashPoint[]) {
