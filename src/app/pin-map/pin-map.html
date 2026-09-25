@@ -1,0 +1,7 @@
+<div class="map" #mapEl></div>
+<div class="hint">
+  <span>Click the map to drop a pin, then drag it to adjust. Typing coordinates moves it too.</span>
+  @if (hasPin()) {
+    <button type="button" (click)="clear()">Remove pin</button>
+  }
+</div>

@@ -4,6 +4,8 @@
     <p>{{ description() }}</p>
   }
 </div>
-<button type="button">
-  <span class="material-symbols-outlined">add</span>Report a crash
-</button>
+@if (showReport()) {
+  <button type="button" routerLink="/report">
+    <span class="material-symbols-outlined">add</span>Report a crash
+  </button>
+}

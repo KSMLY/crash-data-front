@@ -1,0 +1,177 @@
+<app-page-header
+  title="Report a crash"
+  description="Record a new crash. Severity is worked out from the people's injuries."
+  [showReport]="false"
+/>
+
+<div class="card">
+  <ol class="stepper">
+    @for (label of steps; track label; let i = $index) {
+      <li [class.current]="i === step()" [class.done]="i < reached() && i !== step()">
+        <button type="button" [disabled]="i > reached()" (click)="goTo(i)">
+          <span class="num">
+            @if (i < reached() && i !== step()) {
+              <span class="material-symbols-outlined">check</span>
+            } @else {
+              {{ i + 1 }}
+            }
+          </span>
+          {{ label }}
+        </button>
+      </li>
+    }
+  </ol>
+
+  <div class="body">
+    @if (codesError()) {
+      <div class="state">
+        <span class="material-symbols-outlined state-icon error">error</span>
+        <div class="state-title">The form could not be loaded</div>
+        <p>The list of codes did not arrive from the server.</p>
+        <button type="button" class="secondary" (click)="loadCodes()">Try again</button>
+      </div>
+    } @else if (!codes()) {
+      <div class="state"><p>Loading form…</p></div>
+    } @else {
+      @switch (step()) {
+        @case (0) {
+          <form class="grid" [formGroup]="crash">
+            <h2>Crash identity</h2>
+            <label>
+              <span>Police reference <em>*</em></span>
+              <input formControlName="policeRef" maxlength="30" />
+              @if (showError(crash, 'policeRef')) {
+                <small>Enter the police reference.</small>
+              }
+            </label>
+            <label>
+              <span>Reference year <em>*</em></span>
+              <input type="number" formControlName="refYear" min="1990" [max]="thisYear" />
+              @if (showError(crash, 'refYear')) {
+                <small>Enter a year between 1990 and {{ thisYear }}.</small>
+              }
+            </label>
+            <label>
+              <span>Date</span>
+              <input type="date" formControlName="crashDate" />
+              @if (showError(crash, 'crashDate')) {
+                <small>The date can't be in the future.</small>
+              }
+            </label>
+            <label>
+              <span>Time</span>
+              <input type="time" formControlName="crashTime" />
+            </label>
+
+            <h2>Location</h2>
+            <label>
+              <span>District <em>*</em></span>
+              <select formControlName="districtId">
+                <option [ngValue]="null" disabled>Choose a district</option>
+                @for (d of districts(); track d.id) {
+                  <option [ngValue]="d.id">{{ d.nameEn }}</option>
+                }
+              </select>
+              @if (showError(crash, 'districtId')) {
+                <small>Choose a district.</small>
+              }
+            </label>
+            <label>
+              <span>Municipality</span>
+              <select formControlName="municipalityId">
+                <option [ngValue]="null">{{ crash.controls.districtId.value === null ? 'Choose a district first' : 'None' }}</option>
+                @for (m of municipalities(); track m.id) {
+                  <option [ngValue]="m.id">{{ m.nameEn }}</option>
+                }
+              </select>
+            </label>
+            <label>
+              <span>Latitude</span>
+              <input type="number" formControlName="latitude" step="0.000001" placeholder="33.8938" />
+              @if (showError(crash, 'latitude')) {
+                <small>Must be between {{ latRange[0] }} and {{ latRange[1] }}.</small>
+              }
+            </label>
+            <label>
+              <span>Longitude</span>
+              <input type="number" formControlName="longitude" step="0.000001" placeholder="35.5018" />
+              @if (showError(crash, 'longitude')) {
+                <small>Must be between {{ lngRange[0] }} and {{ lngRange[1] }}.</small>
+              }
+            </label>
+            <app-pin-map class="wide" [latitude]="crash.controls.latitude" [longitude]="crash.controls.longitude" />
+            @if (crash.hasError('halfCoordinate') && (crash.controls.latitude.touched || crash.controls.longitude.touched)) {
+              <small class="wide">Enter both latitude and longitude, or leave both empty.</small>
+            }
+          </form>
+        }
+
+        @case (1) {
+          <form class="grid" [formGroup]="road">
+            <h2>Road and conditions</h2>
+            @for (f of roadFields; track f.key) {
+              <label>
+                <span>{{ f.label }} @if (f.required) {<em>*</em>}</span>
+                <select [formControlName]="f.key">
+                  <option value="" [disabled]="f.required">{{ f.required ? 'Choose…' : 'Not recorded' }}</option>
+                  @for (c of codes()![f.key]; track c) {
+                    <option [value]="c">{{ c | label }}</option>
+                  }
+                </select>
+                @if (showError(road, f.key)) {
+                  <small>Choose a value.</small>
+                }
+              </label>
+            }
+            <label>
+              <span>Speed limit <em>*</em></span>
+              <select formControlName="speedLimitKmh">
+                <option [ngValue]="null" disabled>Choose…</option>
+                @for (s of speedLimits; track s) {
+                  <option [ngValue]="s">{{ s }} km/h</option>
+                }
+                <option [ngValue]="unknownSpeed">Unknown</option>
+              </select>
+              @if (showError(road, 'speedLimitKmh')) {
+                <small>Choose a value.</small>
+              }
+            </label>
+
+            <fieldset class="wide">
+              <legend>Traffic controls</legend>
+              @for (c of codes()!['trafficControl']; track c) {
+                <label class="check">
+                  <input
+                    type="checkbox"
+                    [checked]="road.controls.trafficControls.value.includes(c)"
+                    (change)="toggleTrafficControl(c, $any($event.target).checked)"
+                  />
+                  {{ c | label }}
+                </label>
+              }
+            </fieldset>
+          </form>
+        }
+
+        @default {
+          <div class="state">
+            <span class="material-symbols-outlined state-icon">construction</span>
+            <div class="state-title">Not built yet</div>
+            <p>Vehicles, people and the review step come in the next update.</p>
+          </div>
+        }
+      }
+    }
+  </div>
+
+  <footer>
+    <a class="secondary" routerLink="/crashes">Cancel</a>
+    <span class="spacer"></span>
+    @if (step() > 0) {
+      <button type="button" class="secondary" (click)="back()">Back</button>
+    }
+    <button type="button" class="primary" [disabled]="!codes() || step() === steps.length - 1" (click)="next()">
+      Next<span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+  </footer>
+</div>
