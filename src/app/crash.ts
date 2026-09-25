@@ -134,13 +134,13 @@ export class CrashService {
   private http = inject(HttpClient);
 
   search(params: CrashSearch): Observable<Page<Crash>> {
-    let httpParams = new HttpParams();
-    for (const [key, value] of Object.entries(params)) {
-      if (value !== undefined && value !== '') {
-        httpParams = httpParams.set(key, value);
-      }
-    }
-    return this.http.get<Page<Crash>>('/api/crashes', { params: httpParams });
+    return this.http.get<Page<Crash>>('/api/crashes', { params: toHttpParams(params) });
+  }
+
+  // A blob rather than a link to the URL: going through HttpClient is what attaches
+  // the bearer token, a plain navigation would arrive unauthenticated
+  export(params: CrashSearch): Observable<Blob> {
+    return this.http.get('/api/crashes/export', { params: toHttpParams(params), responseType: 'blob' });
   }
 
   getById(id: number): Observable<CrashDetail> {
@@ -173,4 +173,15 @@ export class CrashService {
   getPoints(): Observable<CrashPoint[]> {
     return this.http.get<CrashPoint[]>('/api/crashes/points');
   }
+}
+
+// Empty filters are left out so the backend applies its own defaults
+function toHttpParams(params: CrashSearch): HttpParams {
+  let httpParams = new HttpParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== '') {
+      httpParams = httpParams.set(key, value);
+    }
+  }
+  return httpParams;
 }

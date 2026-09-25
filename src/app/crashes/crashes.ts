@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { DatePipe, SlicePipe } from '@angular/common';
-import { CrashService, Crash, District, Municipality } from '../crash';
+import { CrashService, Crash, CrashSearch, District, Municipality } from '../crash';
 import { PageHeader } from '../page-header/page-header';
 import { LabelPipe } from '../label-pipe';
 import { CrashDetailPanel } from '../crash-detail-panel/crash-detail-panel';
@@ -20,6 +20,8 @@ export class Crashes implements OnInit {
   loading = signal(true);
   error = signal(false);
   selectedId = signal<number | null>(null);
+  exporting = signal(false);
+  exportError = signal(false);
 
   // --- filters ---
   q = signal('');
@@ -80,16 +82,7 @@ export class Crashes implements OnInit {
     this.loading.set(true);
     this.error.set(false);
     this.crashService
-      .search({
-        q: this.q(),
-        severity: this.severity(),
-        crashType: this.crashType(),
-        districtId: this.districtId(),
-        municipalityId: this.municipalityId(),
-        from: this.fromDate(),
-        page: this.page(),
-        size: this.size,
-      })
+      .search({ ...this.filters(), page: this.page(), size: this.size })
       .subscribe({
         next: (data) => {
           this.crashes.set(data.content);
@@ -157,6 +150,40 @@ export class Crashes implements OnInit {
 
   select(crash: Crash) {
     this.selectedId.set(crash.id);
+  }
+
+  // The file comes back as a Blob; a temporary object URL on a hidden link is how a
+  // browser is told to save it. The URL is released straight after the click
+  exportCsv() {
+    this.exporting.set(true);
+    this.exportError.set(false);
+    this.crashService.export(this.filters()).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `crashes-${isoDaysAgo(new Date(), 0)}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+        this.exporting.set(false);
+      },
+      error: () => {
+        this.exportError.set(true);
+        this.exporting.set(false);
+      },
+    });
+  }
+
+  // Shared by the table and the export so both always ask for the same rows
+  private filters(): CrashSearch {
+    return {
+      q: this.q(),
+      severity: this.severity(),
+      crashType: this.crashType(),
+      districtId: this.districtId(),
+      municipalityId: this.municipalityId(),
+      from: this.fromDate(),
+    };
   }
 
   private apply(change: () => void) {
