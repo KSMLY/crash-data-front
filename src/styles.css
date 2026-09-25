@@ -76,3 +76,31 @@ body { font-family: Archivo, sans-serif; color: var(--rs-text); background: var(
 
 /* skeleton pulse */
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+/* hotspot map markers — Leaflet builds these outside any component template, so
+   component-scoped styles would never match them. Sizes and colours come from the
+   design's three cluster buckets; single crashes use the severity dot colours above. */
+.crash-cluster {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  color: #fff;
+  font: 600 12.5px Archivo, sans-serif;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.55);
+}
+.crash-cluster.low  { background: #d4823a; }
+.crash-cluster.mid  { background: #b4491a; font-size: 13.5px; }
+.crash-cluster.high { background: #7c2408; font-size: 14.5px; }
+.crash-dot {
+  display: block;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.crash-dot[data-severity='FATAL']   { background: #22242b; }
+.crash-dot[data-severity='SERIOUS'] { background: #c2410c; }
+.crash-dot[data-severity='SLIGHT']  { background: #a3811a; }
+.crash-popup-title { margin-bottom: 7px; font-weight: 600; }
+.leaflet-popup-content hr { margin: 6px 0; border: none; border-top: 1px solid #e6e6ea; }
+.crash-popup-more { margin-top: 7px; color: #6a6f78; }
