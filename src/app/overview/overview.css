@@ -1,7 +1,9 @@
+/* exactly the height of main, so the overview never scrolls */
 :host {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  height: 100%;
   padding: 26px 32px 24px;
   box-sizing: border-box;
 }
@@ -23,8 +25,9 @@ h2 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
+/* compact: they share the left column with the map */
 .kpi {
-  padding: 18px 20px;
+  padding: 13px 16px;
 }
 .kpi-label {
   display: flex;
@@ -40,18 +43,18 @@ h2 {
 .kpi-value {
   display: flex;
   align-items: baseline;
-  gap: 11px;
-  margin-top: 12px;
+  gap: 9px;
+  margin-top: 8px;
 }
 .number {
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 600;
   letter-spacing: -1px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 .kpi-note {
-  margin-top: 6px;
+  margin-top: 5px;
   font-size: 12.5px;
   color: #5c6169;
 }
@@ -70,17 +73,25 @@ h2 {
   color: #15803d;
 }
 
-/* --- map on the left, chart + districts on the right --- */
+/* --- KPIs over the map on the left, chart + districts on the right; takes the height the header leaves --- */
 .grid {
+  flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(520px, 1fr) 404px;
+  grid-template-rows: minmax(0, 1fr);
   gap: 18px;
-  align-items: start;
 }
 .column {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  min-height: 0;
+}
+/* the map (or its placeholder) takes what the KPIs leave */
+app-hotspot-map,
+.map-slot {
+  flex: 1;
 }
 
 .placeholder {
@@ -98,8 +109,15 @@ h2 {
 }
 
 /* --- top districts --- */
+/* takes the rest of the right column, so it ends level with the map; the rows share the extra height */
 .districts {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 16px 20px 8px;
+}
+.districts table {
+  flex: 1;
 }
 .districts h2 {
   margin-bottom: 10px;
