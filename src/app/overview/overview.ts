@@ -1,4 +1,11 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { PageHeader } from '../page-header/page-header';
 import { HotspotMap } from '../hotspot-map/hotspot-map';
@@ -16,6 +23,7 @@ interface Kpi {
   selector: 'app-overview',
   imports: [DecimalPipe, HotspotMap, PageHeader, TrendChart],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './overview.css',
 })
 export class Overview implements OnInit {

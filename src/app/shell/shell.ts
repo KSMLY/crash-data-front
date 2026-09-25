@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Auth } from '../auth/auth';
 
@@ -6,6 +6,7 @@ import { Auth } from '../auth/auth';
   selector: 'app-shell',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './shell.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './shell.css',
 })
 export class Shell {
