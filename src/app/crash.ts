@@ -65,6 +65,8 @@ export interface CrashDetail extends Crash {
   persons: Person[];
 }
 
+export type Codes = Record<string, string[]>;
+
 export interface Page<T> {
   content: T[];
   page: number;
@@ -155,11 +157,13 @@ export class CrashService {
     return this.http.get<Municipality[]>('/api/municipalities', { params: { districtId } });
   }
 
-  // GET /codes returns every enum keyed by field name; only crashType is needed here
+  // Every enum the API accepts, keyed by field name (crashType, weather, ...)
+  getCodes(): Observable<Codes> {
+    return this.http.get<Codes>('/api/codes');
+  }
+
   getCrashTypes(): Observable<string[]> {
-    return this.http
-      .get<Record<string, string[]>>('/api/codes')
-      .pipe(map((codes) => codes['crashType']));
+    return this.getCodes().pipe(map((codes) => codes['crashType']));
   }
 
   getOverview(): Observable<Overview> {
