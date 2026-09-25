@@ -98,12 +98,10 @@ export class HotspotMap {
   }
 
   private createMap() {
-    // Lebanon, whole country in view. The wheel stays with the page: the map sits
-    // mid-scroll, so zooming it on scroll would trap the reader.
-    this.map = L.map(this.mapEl().nativeElement, { scrollWheelZoom: false }).setView(
-      [33.85, 35.85],
-      8,
-    );
+    // Lebanon, whole country in view. The overview doesn't scroll, so the wheel can
+    // zoom the map. Its height comes from the window, and Leaflet re-measures on
+    // window resize by default (trackResize).
+    this.map = L.map(this.mapEl().nativeElement).setView([33.85, 35.85], 8);
     L.tileLayer(TILES, { attribution: ATTRIBUTION, maxZoom: 16 }).addTo(this.map);
 
     this.markers = L.markerClusterGroup({
@@ -130,28 +128,8 @@ export class HotspotMap {
     }).addTo(this.map);
 
     this.markers.on('clusterclick', (event) => this.openCluster(event.propagatedFrom));
-    this.enableModifierZoom();
   }
 
-  /**
-   * Leaflet's own wheel zoom is off: the card sits mid-page, so a plain wheel over it
-   * has to keep scrolling the page. Holding Ctrl (or Cmd) zooms instead, the way an
-   * embedded map does.
-   */
-  private enableModifierZoom() {
-    const map = this.map!;
-    this.mapEl().nativeElement.addEventListener(
-      'wheel',
-      (event) => {
-        if (!event.ctrlKey && !event.metaKey) return;
-        event.preventDefault();
-        const step = event.deltaY < 0 ? 1 : -1;
-        map.setZoomAround(map.mouseEventToContainerPoint(event), map.getZoom() + step);
-      },
-      // the listener calls preventDefault, which a passive listener may not do
-      { passive: false },
-    );
-  }
 
   /** Zooms into a cluster, or lists its crashes when zooming cannot separate them. */
   private openCluster(cluster: L.MarkerCluster) {

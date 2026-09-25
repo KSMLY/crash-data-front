@@ -106,10 +106,10 @@ svg {
   font-weight: 500;
 }
 
-/* --- loading / error, same height as the drawn chart so the card doesn't jump --- */
+/* --- loading / error, same shape as the drawn chart (its viewBox) so the card doesn't jump --- */
 .skeleton,
 .state {
-  height: 230px;
+  aspect-ratio: 660 / 230;
   box-sizing: border-box;
 }
 .skeleton {

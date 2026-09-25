@@ -1,6 +1,8 @@
 /* the component is the card itself */
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   padding: 16px 16px 14px;
   background: var(--rs-surface);
   border: 1px solid var(--rs-border);
@@ -21,10 +23,13 @@ h2 {
 
 /* positions the legend and the covers over the map */
 .frame {
+  flex: 1;
   position: relative;
 }
+/* sized by the layout: the frame is as tall as the grid leaves it */
 .map {
-  height: 486px;
+  position: absolute;
+  inset: 0;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -93,9 +98,4 @@ h2 {
   width: 9px;
   height: 9px;
   background: #d4823a;
-}
-
-.hint {
-  font-size: 11.5px;
-  color: #6a6f78;
 }

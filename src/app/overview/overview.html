@@ -4,17 +4,19 @@
 />
 
 @if (loading()) {
-  <div class="kpis">
-    @for (i of [0, 1, 2]; track i) {
-      <div class="card kpi skeleton">
-        <div class="bar" style="width: 120px; height: 10px"></div>
-        <div class="bar" style="width: 90px; height: 34px; margin-top: 14px"></div>
-        <div class="bar" style="width: 150px; height: 9px; margin-top: 10px"></div>
-      </div>
-    }
-  </div>
   <div class="grid">
-    <div class="card placeholder"></div>
+    <div class="column">
+      <div class="kpis">
+        @for (i of [0, 1, 2]; track i) {
+          <div class="card kpi skeleton">
+            <div class="bar" style="width: 120px; height: 10px"></div>
+            <div class="bar" style="width: 90px; height: 30px; margin-top: 10px"></div>
+            <div class="bar" style="width: 150px; height: 9px; margin-top: 10px"></div>
+          </div>
+        }
+      </div>
+      <div class="card placeholder map-slot"></div>
+    </div>
     <div class="column">
       <div class="card placeholder"></div>
       <div class="card districts skeleton">
@@ -35,28 +37,29 @@
     </button>
   </div>
 } @else if (overview(); as o) {
-  <div class="kpis">
-    @for (k of kpis(); track k.label) {
-      <div class="card kpi">
-        <div class="kpi-label">
-          <span class="material-symbols-outlined">{{ k.icon }}</span
-          >{{ k.label }}
-        </div>
-        <div class="kpi-value">
-          <span class="number">{{ k.current | number }}</span>
-          @if (delta(k.current, k.previous); as d) {
-            <span class="delta" [class.up]="d > 0" [class.down]="d < 0">
-              {{ d > 0 ? '↑' : d < 0 ? '↓' : '' }} {{ d | number: '1.1-1' }}%
-            </span>
-          }
-        </div>
-        <div class="kpi-note">{{ k.previous | number }} previous 30 days</div>
-      </div>
-    }
-  </div>
-
   <div class="grid">
-    <app-hotspot-map />
+    <div class="column">
+      <div class="kpis">
+        @for (k of kpis(); track k.label) {
+          <div class="card kpi">
+            <div class="kpi-label">
+              <span class="material-symbols-outlined">{{ k.icon }}</span
+              >{{ k.label }}
+            </div>
+            <div class="kpi-value">
+              <span class="number">{{ k.current | number }}</span>
+              @if (delta(k.current, k.previous); as d) {
+                <span class="delta" [class.up]="d > 0" [class.down]="d < 0">
+                  {{ d > 0 ? '↑' : d < 0 ? '↓' : '' }} {{ d | number: '1.1-1' }}%
+                </span>
+              }
+            </div>
+            <div class="kpi-note">{{ k.previous | number }} previous 30 days</div>
+          </div>
+        }
+      </div>
+      <app-hotspot-map />
+    </div>
 
     <div class="column">
       <app-trend-chart />
