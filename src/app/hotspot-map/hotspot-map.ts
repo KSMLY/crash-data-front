@@ -6,6 +6,7 @@ import {
   inject,
   signal,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { formatDate } from '@angular/common';
 import * as L from 'leaflet';
@@ -58,6 +59,7 @@ const ATTRIBUTION = 'Tiles &copy; Esri';
 @Component({
   selector: 'app-hotspot-map',
   templateUrl: './hotspot-map.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './hotspot-map.css',
 })
 export class HotspotMap {
@@ -129,7 +131,6 @@ export class HotspotMap {
 
     this.markers.on('clusterclick', (event) => this.openCluster(event.propagatedFrom));
   }
-
 
   /** Zooms into a cluster, or lists its crashes when zooming cannot separate them. */
   private openCluster(cluster: L.MarkerCluster) {

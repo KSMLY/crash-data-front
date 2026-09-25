@@ -1,4 +1,11 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DatePipe, SlicePipe } from '@angular/common';
 import { CrashService, Crash, CrashSearch, District, Municipality } from '../crash';
 import { PageHeader } from '../page-header/page-header';
@@ -11,6 +18,7 @@ type Period = 'last30' | 'last90' | 'year' | 'all';
   selector: 'app-crashes',
   imports: [DatePipe, SlicePipe, LabelPipe, PageHeader, CrashDetailPanel],
   templateUrl: './crashes.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './crashes.css',
 })
 export class Crashes implements OnInit {
@@ -81,19 +89,17 @@ export class Crashes implements OnInit {
   load() {
     this.loading.set(true);
     this.error.set(false);
-    this.crashService
-      .search({ ...this.filters(), page: this.page(), size: this.size })
-      .subscribe({
-        next: (data) => {
-          this.crashes.set(data.content);
-          this.total.set(data.totalElements);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.error.set(true);
-          this.loading.set(false);
-        },
-      });
+    this.crashService.search({ ...this.filters(), page: this.page(), size: this.size }).subscribe({
+      next: (data) => {
+        this.crashes.set(data.content);
+        this.total.set(data.totalElements);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set(true);
+        this.loading.set(false);
+      },
+    });
   }
 
   // Any filter change restarts from the first page; only paging keeps the position.

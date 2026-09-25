@@ -1,4 +1,13 @@
-import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DatePipe, SlicePipe } from '@angular/common';
 import { CrashService, CrashDetail } from '../crash';
 import { LabelPipe } from '../label-pipe';
@@ -7,6 +16,7 @@ import { LabelPipe } from '../label-pipe';
   selector: 'app-crash-detail-panel',
   imports: [DatePipe, SlicePipe, LabelPipe],
   templateUrl: './crash-detail-panel.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './crash-detail-panel.css',
 })
 export class CrashDetailPanel {

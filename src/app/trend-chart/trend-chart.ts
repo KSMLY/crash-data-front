@@ -1,4 +1,11 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { CrashService, Granularity, TrendPoint } from '../crash';
 import { LabelPipe } from '../label-pipe';
@@ -49,6 +56,7 @@ export function tickStep(max: number): number {
   selector: 'app-trend-chart',
   imports: [DatePipe, DecimalPipe, LabelPipe],
   templateUrl: './trend-chart.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './trend-chart.css',
 })
 export class TrendChart implements OnInit {
